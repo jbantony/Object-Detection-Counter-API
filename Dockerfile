@@ -18,11 +18,11 @@ COPY . .
 
 RUN pip install -r requirements.txt
 
-#WORKDIR /models
+WORKDIR /models
 
-#RUN curl -o yolov3.weights https://pjreddie.com/media/files/yolov3.weights
+RUN curl -o yolov3.weights https://pjreddie.com/media/files/yolov3.weights
 
-#WORKDIR /odapi
+WORKDIR /odapi
 
 ENTRYPOINT ["python"]
 
