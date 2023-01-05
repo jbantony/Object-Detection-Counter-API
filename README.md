@@ -9,6 +9,13 @@ The Object Detection API once deployed in a dockerfile shall receive the data in
 ## Model
 The model used here is YOLOv3 trained on COCO dataset
 
+## Build
+Build the docker using:
+`docker build -t od-api .`
+
+Run the docker:
+`docker run -ti --rm -p 5000:5000 od-api`
+
 
 ## TODO
 
