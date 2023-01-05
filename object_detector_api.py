@@ -5,13 +5,22 @@ import os
 import numpy as np
 import cv2
 from collections import defaultdict
+import urllib.request
 
-def detect_object(img):
+
+async def detect_object(img):
     #load Yolo
-    yolo_weight = "models/yolov3.weights"
+    if os.path.exists("models/yolov3.weights"):
+        yolo_weight = "models/yolov3.weights"
+    else:
+        print("Downloading Model File......")
+        URL = "https://pjreddie.com/media/files/yolov3.weights"
+        yolo_weight= urllib.request.urlretrieve(URL, filename="models/yolov3.weights")
+        print("Model download complete")
+    
     yolo_config= "models/yolov3.cfg"
     coco_names = "models/coco.names"
-    net = cv2.dnn.readNet(yolo_weight, yolo_config)
+    net = cv2.dnn.readNet(model=yolo_weight, config=yolo_config)
     
     classes = []
     with open(coco_names, 'r') as f:
@@ -108,7 +117,9 @@ async def model_inference(file: UploadFile = File(...)):
     #decode the image from the NumPy array
     image = cv2.imdecode(np_image, cv2.IMREAD_UNCHANGED)
 
-    result = detect_object(image)
+
+
+    result = await detect_object(image)
 
     return {"detection result": result}
 
