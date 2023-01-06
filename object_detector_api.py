@@ -22,6 +22,7 @@ async def detect_object(img):
     coco_names = "models/coco.names"
     net = cv2.dnn.readNet(model=yolo_weight, config=yolo_config)
     
+    
     classes = []
     with open(coco_names, 'r') as f:
         classes = [line.strip() for line in f.readlines()]
@@ -36,6 +37,7 @@ async def detect_object(img):
     #resie image
     img = cv2.resize(img, (fWidth, fHeight))
     height, width, channels = img.shape
+    #print(img.shape)
     #convert image to blob
     blob = cv2.dnn.blobFromImage(img, 1/255, (fWidth, fHeight), (0,0,0), True, crop= False)
     net.setInput(blob)
@@ -101,7 +103,7 @@ async def detect_object(img):
     #cv2.imwrite(output_image_path, img)
 
     #return(output_image_path, ordered_classes, object_count)
-    return(ordered_classes, object_count)
+    return({"classes":ordered_classes, "counts":object_count})
 
 app = FastAPI()
 
@@ -110,6 +112,7 @@ async def read_root():
     return {"message":"Welcome to object detection API"}
 
 @app.post("/detect/")
+
 async def model_inference(file: UploadFile = File(...)):
 
     image_data = await file.read()
@@ -117,7 +120,7 @@ async def model_inference(file: UploadFile = File(...)):
     #decode the image from the NumPy array
     image = cv2.imdecode(np_image, cv2.IMREAD_UNCHANGED)
 
-
+    #print(image.shape)
 
     result = await detect_object(image)
 
