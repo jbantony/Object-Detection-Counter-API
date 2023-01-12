@@ -118,6 +118,7 @@ async def read_root():
 async def model_inference(file: UploadFile = File(...)):
 
     image_data = await file.read()
+    image_name = file.filename
     np_image = np.frombuffer(image_data, dtype=np.uint8)
     #decode the image from the NumPy array
     image = cv2.imdecode(np_image, cv2.IMREAD_UNCHANGED)
@@ -126,7 +127,7 @@ async def model_inference(file: UploadFile = File(...)):
 
     result = await detect_object(image)
 
-    return {"detection result": result}
+    return {"filename": image_name, "detection results": result}
 
 
 if __name__ == "__main__":
