@@ -41,6 +41,65 @@ After deploying the docker locally, one can make a POST request using the `curl`
 
 `curl -X POST -F "file=@/path/to/image.jpg" http://localhost:5000/detect/` and gives the JSON data in the above mentioned format as response.
 
+## Demo
+
+The `/detect/` endpoint responses as follows: From FastAPI Documentation
+
+![](docs/response1.png)
+
+![](docs/response2.png)
+
+Raw JSON data of the result:
+
+```json
+
+{
+  "filename": "image1.jpg",
+  "detection results": {
+    "detected objects": {
+      "label": [
+        "person",
+        "dog",
+        "dog"
+      ],
+      "confidence": [
+        64,
+        99,
+        99
+      ],
+      "boxes": [
+        [
+          777,
+          5,
+          247,
+          438
+        ],
+        [
+          19,
+          37,
+          304,
+          499
+        ],
+        [
+          352,
+          77,
+          683,
+          519
+        ]
+      ]
+    },
+    "counts": {
+      "person": 1,
+      "dog": 2
+    },
+    "image height": 636,
+    "image width": 1024
+  }
+}
+
+```
+
+
 
 ## Notes
 The latest OpenCV version 4.7 is having bugs and therefore the OpenCV version 4.6 has been used for the inference 
