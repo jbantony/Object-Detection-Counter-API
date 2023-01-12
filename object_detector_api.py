@@ -70,10 +70,11 @@ async def detect_object(img):
             # if confidence > 0.5 and class_id == 0:
             if confidence > 0.5:
                 # Extract values to draw bounding box
-                center_x = int(detection[0] * width)
-                center_y = int(detection[1] * height)
-                w = int(detection[2] * width)
-                h = int(detection[3] * height)
+                # replace the width0 and height0 with width, height for writing the boxes on resized image
+                center_x = int(detection[0] * width0)
+                center_y = int(detection[1] * height0)
+                w = int(detection[2] * width0)
+                h = int(detection[3] * height0)
                 # Rectangle coordinates
                 x = int(center_x - w / 2)
                 y = int(center_y - h / 2)
@@ -84,17 +85,18 @@ async def detect_object(img):
     indexes = cv2.dnn.NMSBoxes(boxes, confidences, 0.5, 0.4)
     # Draw bounding box with text for each object
     font = cv2.FONT_HERSHEY_COMPLEX_SMALL
-    ordered_classes = {"label": [], "confidence": []}
+    ordered_classes = {"label": [], "confidence": [], "boxes": []}
     object_count = defaultdict(int)
     for i in range(len(boxes)):
         if i in indexes:
             x, y, w, h = boxes[i]
+            ordered_classes['boxes'].append([x,y,w,h])
             label = str(classes[class_ids[i]])
             ordered_classes['label'].append(label)
             confidence_label = int(confidences[i] * 100)
             ordered_classes['confidence'].append(confidence_label)
             object_count[str(label)] +=1
-            color = colors[i]
+            #color = colors[i]
             #cv2.rectangle(img, (x, y), (x + w, y + h), color, 2)
             #cv2.putText(img, f'{label}', (x+25, y + 75), font, 1, color, 1)
  
@@ -103,7 +105,7 @@ async def detect_object(img):
     #cv2.imwrite(output_image_path, img)
 
     #return(output_image_path, ordered_classes, object_count)
-    return({"classes":ordered_classes, "counts":object_count})
+    return({"detected objects":ordered_classes, "counts":object_count, "image height":height0, "image width": width0})
 
 app = FastAPI()
 
