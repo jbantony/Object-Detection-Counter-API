@@ -1,0 +1,43 @@
+{
+  "filename": "image1.jpg",
+  "detection results": {
+    "detected objects": {
+      "label": [
+        "person",
+        "dog",
+        "dog"
+      ],
+      "confidence": [
+        64,
+        99,
+        99
+      ],
+      "boxes": [
+        [
+          777,
+          5,
+          247,
+          438
+        ],
+        [
+          19,
+          37,
+          304,
+          499
+        ],
+        [
+          352,
+          77,
+          683,
+          519
+        ]
+      ]
+    },
+    "counts": {
+      "person": 1,
+      "dog": 2
+    },
+    "image height": 636,
+    "image width": 1024
+  }
+}
