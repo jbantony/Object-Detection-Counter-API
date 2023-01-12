@@ -1,9 +1,9 @@
-# YOLO ObjectDetectionAPI in Docker
-API endpoints to run object detection using YOLOv3. The user can send an image to the API endpoint and the detected results will be received as response.
+# YOLO ObjectDetection and Object Counter as API in Docker
+API endpoint to run object detection and counting using YOLOv3. The user can send an image to the defined API endpoint and the detected results as well as the counts, will be received as response.
 
 
 ## Goal
-The goal of this project is to test and demonstrate the AI-Serving concept, by deploying the Object Detection model as a docker image, so that any application can be interacted with this docker by making a POST request at the API endpoint with an image data and can receive the detection results as the response. 
+The goal of this project is to test and demonstrate the AI-Serving concept, by deploying the Object Detection model as a docker image, so that any application can be interacted with this docker by making a POST request at the API endpoint with an image data and can receive the detection results and counts as the response. 
 
 Object Detection API once deployed in a dockerfile shall receive the data input over a JSON Query and after inference generate the output and make it available in a JSON format.
 
@@ -31,10 +31,27 @@ Gives a health message in JSON format as follows
 
 #### Endpoint `/detect/`
 
-This return a JSON file in the format `"classes":ordered_classes, "counts":object_count` , where the  `ordered_classes` is a list of detected objects in the given image and the `object_count` gives the total count of each classes.
-This endpoint can be custom configured to get the `confidence scores` or `x,y,w,h` cordinates of each bounding box. 
+The endpoint `/detect/` is used to perform object detection on the given image. This return a JSON file in the below format:
+```json
+{
+    "filename": "...",
+    "detection results": {
+        "detected objects":{
+        "label": [...],
+        "confidence": [...],
+        "boxes": [[x,y,w,h], [x1,y1,w1,h1], ...]
+    },
+    "counts":{
+        "class name": "no of instances", ...
+    },
+    "image height": ...,
+    "image width": ...
+    }
+}
+```
 
-This can even exteneded to send an imagedata including all the detection results as response.
+where the  `detection results` gives the information on the `detected objects` including the `label`, `confidence` and bounding `boxes`.  The `counts` gives the total count of each classes in the given image.
+ 
 
 ## Usage
 After deploying the docker locally, one can make a POST request using the `curl` command:
@@ -106,5 +123,5 @@ The latest OpenCV version 4.7 is having bugs and therefore the OpenCV version 4.
 
 ## TODO
 
-- Extend the detect endpoint to send detected image and cordinates also. 
+- Extend the detect endpoint to send detected image. 
 - Update the notebooks folder with the model generating notebook for a custom dataset
